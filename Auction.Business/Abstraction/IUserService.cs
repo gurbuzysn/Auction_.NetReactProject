@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Auction.Business.Dtos;
+using Auction.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +11,6 @@ namespace Auction.Business.Abstraction
     public interface IUserService
     {
         Task<ApiResponse> Register(RegisterRequestDto model);
-        Task<ApiResponse>
+        Task<ApiResponse> Login(LoginRequestDto model);
     }
 }
