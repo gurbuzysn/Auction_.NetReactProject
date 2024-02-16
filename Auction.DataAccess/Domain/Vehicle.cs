@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Auction.DataAccess.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -25,5 +26,8 @@ namespace Auction.DataAccess.Domain
         public bool IsActive { get; set; }
         public string Image { get; set; }
         public string SellerId { get; set; }
+
+        public ApplicationUser Seller { get; set; }
+        public virtual List<Bid> Bids { get; set; }
     }
 }
