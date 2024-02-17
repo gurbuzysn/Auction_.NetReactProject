@@ -1,4 +1,5 @@
 ﻿using Auction.Business.Dtos;
+using Auction.DataAccess.Domain;
 using Auction.DataAccess.Models;
 using AutoMapper;
 using System;
@@ -13,7 +14,9 @@ namespace Auction.Business.Mapper
     {
         public MappingProfile()
         {
-            CreateMap<RegisterRequestDto, ApplicationUser>();
+            //CreateMap<RegisterRequestDto, ApplicationUser>();
+
+            CreateMap<CreateVehicleDto, Vehicle>().ReverseMap();
         }
     }
 }
