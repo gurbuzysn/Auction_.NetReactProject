@@ -14,7 +14,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFramework
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped(typeof(ApiResponse));
-builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+//builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
