@@ -192,7 +192,7 @@ namespace Auction.DataAccess.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Bid",
+                name: "Bids",
                 columns: table => new
                 {
                     BidId = table.Column<int>(type: "int", nullable: false)
@@ -205,15 +205,15 @@ namespace Auction.DataAccess.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Bid", x => x.BidId);
+                    table.PrimaryKey("PK_Bids", x => x.BidId);
                     table.ForeignKey(
-                        name: "FK_Bid_AspNetUsers_UserId",
+                        name: "FK_Bids_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Bid_Vehicle_VehicleId",
+                        name: "FK_Bids_Vehicle_VehicleId",
                         column: x => x.VehicleId,
                         principalTable: "Vehicle",
                         principalColumn: "VehicleId",
@@ -221,7 +221,7 @@ namespace Auction.DataAccess.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PaymentHistory",
+                name: "PaymentHistories",
                 columns: table => new
                 {
                     PaymentId = table.Column<int>(type: "int", nullable: false)
@@ -233,15 +233,15 @@ namespace Auction.DataAccess.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PaymentHistory", x => x.PaymentId);
+                    table.PrimaryKey("PK_PaymentHistories", x => x.PaymentId);
                     table.ForeignKey(
-                        name: "FK_PaymentHistory_AspNetUsers_UserId",
+                        name: "FK_PaymentHistories_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PaymentHistory_Vehicle_VehicleId",
+                        name: "FK_PaymentHistories_Vehicle_VehicleId",
                         column: x => x.VehicleId,
                         principalTable: "Vehicle",
                         principalColumn: "VehicleId",
@@ -288,23 +288,23 @@ namespace Auction.DataAccess.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bid_UserId",
-                table: "Bid",
+                name: "IX_Bids_UserId",
+                table: "Bids",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bid_VehicleId",
-                table: "Bid",
+                name: "IX_Bids_VehicleId",
+                table: "Bids",
                 column: "VehicleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PaymentHistory_UserId",
-                table: "PaymentHistory",
+                name: "IX_PaymentHistories_UserId",
+                table: "PaymentHistories",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PaymentHistory_VehicleId",
-                table: "PaymentHistory",
+                name: "IX_PaymentHistories_VehicleId",
+                table: "PaymentHistories",
                 column: "VehicleId");
 
             migrationBuilder.CreateIndex(
@@ -332,10 +332,10 @@ namespace Auction.DataAccess.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Bid");
+                name: "Bids");
 
             migrationBuilder.DropTable(
-                name: "PaymentHistory");
+                name: "PaymentHistories");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
