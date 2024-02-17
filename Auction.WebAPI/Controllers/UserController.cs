@@ -30,7 +30,7 @@ namespace Auction.WebAPI.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> LoginUser ([FromBody] LoginRequestDto model)
         {
-            var response = await _userService.Login(model);
+             var response = await _userService.Login(model);
             if (response.IsSuccess)
                 return Ok(response);
 

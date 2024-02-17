@@ -93,17 +93,25 @@ namespace Auction.Business.Concrete
         public async Task<ApiResponse> Register(RegisterRequestDto model)
         {
             var userFromDb = _context.ApplicationUsers.FirstOrDefault(x => x.UserName.ToLower() == model.UserName.ToLower());
-
-            if (userFromDb == null)
+            
+            if (userFromDb != null)
             {
                 _response.StatusCode = System.Net.HttpStatusCode.BadRequest;
                 _response.IsSuccess = false;
                 _response.ErrorMessages.Add("Username already exist");
-
                 return _response;
             }
 
-            var newUser = _mapper.Map<ApplicationUser>(model);
+            //var newUser = _mapper.Map<ApplicationUser>(model);
+
+            ApplicationUser newUser = new()
+            {
+                FullName = model.FullName,
+                UserName = model.UserName,
+                NormalizedEmail = model.UserName.ToUpper(),
+                Email = model.UserName
+            };
+
             var result = await _userManager.CreateAsync(newUser, model.Password);
 
             if (result.Succeeded)
@@ -130,7 +138,7 @@ namespace Auction.Business.Concrete
                     await _userManager.AddToRoleAsync(newUser, UserType.NormalUser.ToString());
                 }
 
-                _response.StatusCode = System.Net.HttpStatusCode.OK;
+                _response.StatusCode = System.Net.HttpStatusCode.Created;
                 _response.IsSuccess = true;
                 return _response;
             }
