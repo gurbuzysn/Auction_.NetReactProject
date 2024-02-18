@@ -4,6 +4,7 @@ using Auction.Core.Models;
 using Auction.DataAccess.Context;
 using Auction.DataAccess.Domain;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,24 +55,63 @@ namespace Auction.Business.Concrete
             return _response;
         }
 
-        public Task<ApiResponse> DeleteVehicle(int vehicleId)
+        public async Task<ApiResponse> DeleteVehicle(int vehicleId)
         {
-            throw new NotImplementedException();
+            var vehicle = await _context.Vehicle.FindAsync(vehicleId);
+            if(vehicle != null)
+            {
+                _context.Vehicle.Remove(vehicle);
+                if (await _context.SaveChangesAsync() > 0)
+                {
+                    _response.IsSuccess = true;
+                    return _response;
+                }
+            }
+            _response.IsSuccess= false;
+            return _response;
         }
 
-        public Task<ApiResponse> GetVehicleById(int vehicleId)
+        public async Task<ApiResponse> GetVehicleById(int vehicleId)
         {
-            throw new NotImplementedException();
+            var result = await _context.Vehicle.Include(x => x.Seller).FirstOrDefaultAsync(x => x.VehicleId == vehicleId);
+            if (result != null)
+            {
+                _response.Result = result;
+                _response.IsSuccess = true;
+                return _response;
+            }
+            _response.IsSuccess = false;
+            return _response;
         }
 
-        public Task<ApiResponse> GetVehicles()
+        public async Task<ApiResponse> GetVehicles()
         {
-            throw new NotImplementedException();
+            var vehicle = await _context.Vehicle.Include(x => x.Seller).ToListAsync();
+            if (vehicle != null)
+            {
+                _response.IsSuccess = true;
+                _response.Result = vehicle;
+                return _response;
+            }
+            _response.IsSuccess = false;
+            return _response;
         }
 
-        public Task<ApiResponse> UpdateVehicleResponse(int vehicleId, UpdateVehicleDto model)
+        public async Task<ApiResponse> UpdateVehicleResponse(int vehicleId, UpdateVehicleDto model)
         {
-            throw new NotImplementedException();
+            var result = await _context.Vehicle.FindAsync(vehicleId);
+            if (result != null)
+            {
+                Vehicle objDto = _mapper.Map(model, result);
+                if(await _context.SaveChangesAsync() > 0)
+                {
+                    _response.Result = objDto;
+                    _response.IsSuccess=true;
+                    return _response;
+                }
+            }
+            _response.IsSuccess = false;
+            return _response;
         }
     }
 }
