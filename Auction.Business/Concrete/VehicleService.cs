@@ -25,9 +25,18 @@ namespace Auction.Business.Concrete
             _context = context;
             _response = response;
         }
-        public Task<ApiResponse> ChangeVehicleStatus(int vehicleId)
+        public async Task<ApiResponse> ChangeVehicleStatus(int vehicleId)
         {
-            throw new NotImplementedException();
+            var result = await _context.Vehicle.FindAsync(vehicleId);
+            if(result == null)
+            {
+                _response.IsSuccess = false;
+                return _response;
+            }
+            result.IsActive = false;
+            _response.IsSuccess = true;
+            await _context.SaveChangesAsync();
+            return _response;
         }
 
         public async Task<ApiResponse> CreateVehicle(CreateVehicleDto model)
