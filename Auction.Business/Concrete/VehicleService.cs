@@ -31,14 +31,27 @@ namespace Auction.Business.Concrete
 
         public async Task<ApiResponse> CreateVehicle(CreateVehicleDto model)
         {
-            if(model != null)
+            if (model != null)
             {
                 var objDto = _mapper.Map<Vehicle>(model);
-                if(objDto != null)
+                if (objDto != null)
                 {
-                    await _context.Vehicle.AddAsync(objDto);
+                    _context.Vehicle.Add(objDto);
+
+                    if (await _context.SaveChangesAsync() > 0)
+                    {
+                        _response.IsSuccess = true;
+                        _response.Result = model;
+                        _response.StatusCode = System.Net.HttpStatusCode.Created;
+                        return _response;
+
+
+                    }
                 }
             }
+            _response.ErrorMessages.Add("Ooops! Something went wrong");
+            _response.IsSuccess = false;
+            return _response;
         }
 
         public Task<ApiResponse> DeleteVehicle(int vehicleId)
