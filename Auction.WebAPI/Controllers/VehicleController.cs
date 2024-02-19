@@ -31,14 +31,17 @@ namespace Auction.WebAPI.Controllers
                 string uploadFolder = Path.Combine(_webHostEnvironment.ContentRootPath, "Images");
                 string fileName = $"{Guid.NewGuid()}{Path.GetExtension(model.File.FileName)}";
                 string filePath = Path.Combine(uploadFolder, fileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    await model.File.CopyToAsync(fileStream);
-                }
+                
                 model.Image = fileName;
                 var result = await _vehicleService.CreateVehicle(model);
                 if (result.IsSuccess)
+                {
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await model.File.CopyToAsync(fileStream);
+                    }
                     return Ok(result);
+                }
             }
             return BadRequest();
         }
@@ -52,7 +55,7 @@ namespace Auction.WebAPI.Controllers
 
 
         [HttpPut("UpdateVehicle")]
-        public async Task<IActionResult> UpdateVehicle([FromRoute] int vehicleId, UpdateVehicleDto model)
+        public async Task<IActionResult> UpdateVehicle( int vehicleId, [FromForm] UpdateVehicleDto model)
         {
             if (ModelState.IsValid)
             {

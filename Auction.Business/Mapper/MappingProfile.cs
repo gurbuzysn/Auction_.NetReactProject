@@ -17,6 +17,7 @@ namespace Auction.Business.Mapper
             //CreateMap<RegisterRequestDto, ApplicationUser>();
 
             CreateMap<CreateVehicleDto, Vehicle>().ReverseMap();
+            CreateMap<UpdateVehicleDto, Vehicle>().ReverseMap();
         }
     }
 }
