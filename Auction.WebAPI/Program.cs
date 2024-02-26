@@ -15,6 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddPersistenceLayer(builder.Configuration);
 builder.Services.AddApplicationLayer(builder.Configuration);
+builder.Services.AddSwaggerCollection(builder.Configuration);
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

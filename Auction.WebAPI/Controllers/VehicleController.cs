@@ -1,5 +1,6 @@
 ﻿using Auction.Business.Abstraction;
 using Auction.Business.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;
@@ -68,7 +69,8 @@ namespace Auction.WebAPI.Controllers
             return BadRequest();
         }
 
-        [HttpDelete("{vehicleId}")]
+        [Authorize(Roles = "Administrator")]
+        [HttpDelete("Remove/Vehicle/{vehicleId}")]
         public async Task<IActionResult> DeleteVehicle([FromRoute] int vehicleId)
         {
             var result = await _vehicleService.DeleteVehicle(vehicleId);
