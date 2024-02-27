@@ -1,5 +1,6 @@
 ﻿using Auction.Business.Abstraction;
 using Auction.Business.Dtos;
+using Auction.Core.MailHelper;
 using Auction.Core.Models;
 using Auction.DataAccess.Context;
 using Auction.DataAccess.Domain;
@@ -18,12 +19,14 @@ namespace Auction.Business.Concrete
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IMailService _mailService;
         private readonly ApiResponse _response;
 
-        public BidService(ApplicationDbContext context, IMapper mapper, ApiResponse response)
+        public BidService(ApplicationDbContext context, IMapper mapper, IMailService mailService, ApiResponse response)
         {
             _context = context;
             _mapper = mapper;
+            _mailService = mailService;
             _response = response;
         }
         public async Task<ApiResponse> AutomaticliyCreateBid(CreateBidDto model)
@@ -103,7 +106,8 @@ namespace Auction.Business.Concrete
                 await _context.Bids.AddAsync(bid);
                 
                 if(await _context.SaveChangesAsync() > 0)
-                { 
+                {
+                    _mailService.SendMail("Your bid is success", "Your bid is : " + bid.BidAmount, bid.User.UserName);
                     _response.IsSuccess = true;
                     _response.Result = model;
                     return _response;

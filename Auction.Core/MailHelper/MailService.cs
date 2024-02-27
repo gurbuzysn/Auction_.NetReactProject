@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace Auction.Core.MailHelper
 {
-    public class MailService : IMailService
-    {
-        public void SendMail(string subject, string body, string email)
-        {
+	public class MailService : IMailService
+	{
+		public void SendMail(string subject, string body, string email)
+		{
 			try
 			{
 				var emailToSent = new MimeMessage();
@@ -35,6 +35,6 @@ namespace Auction.Core.MailHelper
 
 				throw ex;
 			}
-        }
-    }
+		}
+	}
 }

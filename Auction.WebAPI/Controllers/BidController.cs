@@ -42,7 +42,7 @@ namespace Auction.WebAPI.Controllers
             return Ok(response);
         }
 
-        [HttpGet("bidId:int")]
+        [HttpPut("bidId:int")]
         public async Task<IActionResult> ModifyBid(int bidId, UpdateBidDto model)
         {
             if (ModelState.IsValid)
@@ -59,7 +59,7 @@ namespace Auction.WebAPI.Controllers
         }
 
 
-        [HttpPost("Create")]
+        [HttpPost]
         public async Task<IActionResult> AutoBid(CreateBidDto model)
         {
             if (ModelState.IsValid)
@@ -77,10 +77,10 @@ namespace Auction.WebAPI.Controllers
 
 
 
-        [HttpGet("GetBidsByVehicle/{bidId:int}")]
-        public async Task<IActionResult> GetBidByVehicle(int bidId)
+        [HttpGet("GetBidsByVehicle/{vehicleId:int}")]
+        public async Task<IActionResult> GetBidByVehicle(int vehicleId)
         {
-            var response = await _bidService.GetBidByVehicleId(bidId);
+            var response = await _bidService.GetBidByVehicleId(vehicleId);
 
             if (!response.IsSuccess)
             {
