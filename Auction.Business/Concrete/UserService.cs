@@ -41,52 +41,56 @@ namespace Auction.Business.Concrete
 
         public async Task<ApiResponse> Login(LoginRequestDto model)
         {
-            ApplicationUser userFromDb = _context.ApplicationUsers.FirstOrDefault(x => x.UserName.ToLower() == model.UserName.ToLower());
-            if (userFromDb == null)
+            ApplicationUser userFormDb = _context.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == model.UserName.ToLower());
+           if(userFormDb != null)
             {
-                _response.IsSuccess = false;
-                _response.ErrorMessages.Add("Ooops! something went wrong");
-                return _response;
-            }
-
-            bool isValid = await _userManager.CheckPasswordAsync(userFromDb, model.Password);
-
-            if (!isValid)
-            {
-                _response.Result = System.Net.HttpStatusCode.BadRequest;
-                _response.ErrorMessages.Add("Your entry information is not correct");
-                _response.IsSuccess = false;
-                return _response;
-            }
-
-            var role = await _userManager.GetRolesAsync(userFromDb);
-            JwtSecurityTokenHandler tokenHandler = new();
-            byte[] key = Encoding.ASCII.GetBytes(secretKey);
-
-            SecurityTokenDescriptor tokenDescriptor = new()
-            {
-                Subject = new System.Security.Claims.ClaimsIdentity(new Claim[]
+                bool isValid = await _userManager.CheckPasswordAsync(userFormDb, model.Password);
+                if (!isValid)
                 {
-                    new Claim(ClaimTypes.NameIdentifier, userFromDb.Id),
-                    new Claim(ClaimTypes.Email, userFromDb.Email),
-                    new Claim(ClaimTypes.Role, role.FirstOrDefault()),
-                    new Claim("fullName", userFromDb.FullName)
-                }),
-                Expires = DateTime.UtcNow.AddDays(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
+                    _response.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                    _response.ErrorMessages.Add("Your entry information is not correct");
+                    _response.IsSuccess = false;
+                    return _response;
+                }
+                var role = await _userManager.GetRolesAsync(userFormDb);
 
-            SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
 
-            LoginResponseModel _model = new()
-            {
-                Email = userFromDb.Email,
-                Token = tokenHandler.WriteToken(token),
-            };
 
-            _response.Result =  _model;
-            _response.IsSuccess = true;
-            _response.StatusCode = System.Net.HttpStatusCode.OK;
+                JwtSecurityTokenHandler tokenHandler = new();
+                byte[] key = Encoding.ASCII.GetBytes(secretKey);
+
+                SecurityTokenDescriptor tokenDescriptor = new()
+                {
+                    Subject = new System.Security.Claims.ClaimsIdentity(new Claim[]
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, userFormDb.Id),
+                        new Claim(ClaimTypes.Email, userFormDb.Email),
+                        new Claim(ClaimTypes.Role, role.FirstOrDefault()),
+                        new Claim("fullName", userFormDb.FullName),
+                    }),
+                    Expires = DateTime.UtcNow.AddDays(1),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
+                };
+
+                SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+
+                LoginResponseModel _model = new()
+                {
+                    Email = userFormDb.Email,
+                    Token = tokenHandler.WriteToken(token),
+                };
+                _response.Result = _model;
+                _response.IsSuccess = true;
+                _response.StatusCode = System.Net.HttpStatusCode.OK;
+                return _response;
+
+
+
+
+
+            }
+           _response.IsSuccess = false;
+            _response.ErrorMessages.Add("Ooops! somehing went wrong");
             return _response;
         }
 
@@ -102,7 +106,7 @@ namespace Auction.Business.Concrete
                 return _response;
             }
 
-            //var newUser = _mapper.Map<ApplicationUser>(model);
+          //  var newUser = _mapper.Map<ApplicationUser>(model);
 
             ApplicationUser newUser = new()
             {
