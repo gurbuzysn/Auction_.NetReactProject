@@ -12,6 +12,6 @@ namespace Auction.Business.Dtos
         public DateTime BidDate { get; set; }
         public string BidStatus { get; set; }
         public string UserId { get; set; }
-        public string VehicleId { get; set; }
+        public int VehicleId { get; set; }
     }
 }

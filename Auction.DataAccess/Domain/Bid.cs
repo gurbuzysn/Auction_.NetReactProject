@@ -17,7 +17,7 @@ namespace Auction.DataAccess.Domain
         public DateTime BidDate { get; set; }
         public string BidStatus { get; set; } = Auction.DataAccess.Enums.BidStatus.Pending.ToString();
         public string UserId { get; set; }
-        //public string VehicleId { get; set; }
+        public int VehicleId { get; set; }
 
         public ApplicationUser User { get; set; }
         public Vehicle Vehicle { get; set; }
