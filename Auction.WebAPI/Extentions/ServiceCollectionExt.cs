@@ -11,6 +11,7 @@ namespace Auction.WebAPI.Extentions
             #region Services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IVehicleService, VehicleService>();
+            services.AddScoped<IBidService, BidService>();
             services.AddScoped(typeof(ApiResponse));
             #endregion
 
