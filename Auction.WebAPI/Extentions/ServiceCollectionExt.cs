@@ -1,5 +1,6 @@
 ﻿using Auction.Business.Abstraction;
 using Auction.Business.Concrete;
+using Auction.Core.MailHelper;
 using Auction.Core.Models;
 
 namespace Auction.WebAPI.Extentions
@@ -12,6 +13,7 @@ namespace Auction.WebAPI.Extentions
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IVehicleService, VehicleService>();
             services.AddScoped<IBidService, BidService>();
+            services.AddScoped<IMailService, MailService>();
             services.AddScoped(typeof(ApiResponse));
             #endregion
 
