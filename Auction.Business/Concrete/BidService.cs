@@ -69,12 +69,12 @@ namespace Auction.Business.Concrete
             var returnValue = await CheckIsActive(model.VehicleId);
             var isPaid = await CheckIsPaidAuction(model.UserId, model.VehicleId);
 
-            if (!isPaid)
-            {
-                _response.IsSuccess = false;
-                _response.ErrorMessages.Add("Please before pay auction price");
-                return _response;
-            }
+            //if (!isPaid)
+            //{
+            //    _response.IsSuccess = false;
+            //    _response.ErrorMessages.Add("Please before pay auction price");
+            //    return _response;
+            //}
             if (returnValue == null)
             {
                 _response.IsSuccess = false;
@@ -107,6 +107,7 @@ namespace Auction.Business.Concrete
                 
                 if(await _context.SaveChangesAsync() > 0)
                 {
+                    var userDetail = await _context.Bids.Include(x => x.User).Where(x => x.UserId == model.UserId).FirstOrDefaultAsync();    
                     _mailService.SendMail("Your bid is success", "Your bid is : " + bid.BidAmount, bid.User.UserName);
                     _response.IsSuccess = true;
                     _response.Result = model;
